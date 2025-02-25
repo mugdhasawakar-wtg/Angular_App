@@ -1,23 +1,38 @@
-<div class="container">
-  <h3>{{ isEdit ? 'Edit Department' : 'Add Department' }}</h3>
+<!-- Modal for Create/Edit Department -->
+<div *ngIf="showModal" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEdit ? 'Edit Department' : 'Add Department' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()">
+          <div *ngIf="isEdit" class="mb-3">
+            ID: {{ department.id }}
+          </div>
 
-  <form (ngSubmit)="onSubmit()" class="p-4 border rounded bg-light">
-    <div class="mb-3">
-      <label for="name" class="form-label">Department Name</label>
-      <input type="text" id="name" class="form-control" [(ngModel)]="department.name" name="name" required>
+          <div class="mb-3">
+            <label for="name" class="form-label">Department Name</label>
+            <input type="text" id="name" class="form-control" [(ngModel)]="department.name" name="name" required>
+          </div>
+
+          <div class="form-check mb-3">
+            <input type="checkbox" id="readOnly" class="form-check-input" [(ngModel)]="department.readOnly" name="readOnly">
+            <label for="readOnly" class="form-check-label">Read Only</label>
+          </div>
+
+          <div class="form-check mb-3">
+            <input type="checkbox" id="mandatory" class="form-check-input" [(ngModel)]="department.mandatory" name="mandatory">
+            <label for="mandatory" class="form-check-label">Mandatory</label>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Save' }}</button>
+            <button type="button" class="btn btn-secondary ms-2" (click)="closeModal()">Close</button>
+          </div>
+        </form>
+      </div>
     </div>
-
-    <div class="form-check mb-3">
-      <input type="checkbox" id="readOnly" class="form-check-input" [(ngModel)]="department.readOnly" name="readOnly">
-      <label for="readOnly" class="form-check-label">Read Only</label>
-    </div>
-
-    <div class="form-check mb-3">
-      <input type="checkbox" id="mandatory" class="form-check-input" [(ngModel)]="department.mandatory" name="mandatory">
-      <label for="mandatory" class="form-check-label">Mandatory</label>
-    </div>
-
-    <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Save' }}</button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">Cancel</button>
-  </form>
+  </div>
 </div>

@@ -25,3 +25,12 @@
     </tbody>
   </table>
 </div>
+
+<!-- Pass showModal to department-form -->
+<app-department-form
+  [isEdit]="isEdit"
+  [department]="selectedDepartment"
+  [showModal]="showModal"
+  (departmentSaved)="fetchDepartments()"
+  (close)="closeModal()">
+</app-department-form>

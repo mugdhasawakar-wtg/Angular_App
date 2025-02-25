@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-list',
@@ -9,10 +10,10 @@ import { EmployeeService } from '../../services/employee.service';
 export class EmployeeListComponent implements OnInit {
   employees: any[] = []; // Store employee data
   showCreateEmployeeModal: boolean = false; // Modal visibility flag
+  employee: any = { nameFirst: '', nameLast: '' }; // Store employee details
+  isEdit: boolean = false; // Track edit mode
 
-  //@ViewChild(EmployeeFormComponent) employeeForm!: EmployeeFormComponent;
-
-  constructor(private employeeService: EmployeeService) {}
+  constructor(private employeeService: EmployeeService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchEmployees(); // Load employees when component initializes
@@ -31,15 +32,29 @@ export class EmployeeListComponent implements OnInit {
   // ✅ Open the modal for creating a new employee
   openCreateModal() {
     console.log('Opening create employee modal');
-    //this.showCreateEmployeeModal = true;
-    // You can navigate to a form page or show a modal here
+    this.employee = { nameFirst: '', nameLast: '' }; // Reset form for new entry
+    this.isEdit = false; // Set create mode
+    this.showCreateEmployeeModal = true; // Show modal
+  }
+
+  closeCreateModal() {
+    console.log('Closing create employee modal');
+    this.showCreateEmployeeModal = false; // Hide the modal
+  }
+
+  handleEmployeeCreated() {
+    this.fetchEmployees();
+    this.closeCreateModal();
   }
 
   // ✅ Edit employee
   editEmployee(employee: any) {
     console.log('Editing employee:', employee);
-    // Navigate to form with employee data or open modal
+    this.employee = { ...employee }; // Copy employee data
+    this.isEdit = true; // Enable edit mode
+    this.showCreateEmployeeModal = true; // Show modal
   }
+
 
   // ✅ Delete employee
   deleteEmployee(id: number) {

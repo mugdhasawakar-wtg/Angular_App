@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DepartmentService } from '../../services/department.service';
 
 @Component({
@@ -9,25 +9,37 @@ import { DepartmentService } from '../../services/department.service';
 export class DepartmentFormComponent {
   @Input() isEdit: boolean = false;
   @Input() department: any = { name: '', readOnly: false, mandatory: false };
+  @Input() showModal: boolean = false; // ✅ Get from parent
+  @Output() departmentSaved = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>(); // ✅ Notify parent to close modal
 
   constructor(private departmentService: DepartmentService) {}
 
   onSubmit() {
     if (this.isEdit) {
-      // ✅ Update department
+      // const updatePayload = {
+      //   id: this.department.id,
+      //   name: this.department.name,
+      //   readOnly: this.department.readOnly,
+      //   mandatory: this.department.mandatory
+      // };
+      console.log('Updating department:', this.department);
       this.departmentService.updateDepartment(this.department.id, this.department).subscribe(response => {
         console.log('Department updated:', response);
         alert('Department updated successfully!');
+        this.departmentSaved.emit();
+        this.close.emit(); // ✅ Close modal after saving
       }, error => {
         console.error('Error updating department:', error);
         alert('Failed to update department.');
       });
 
     } else {
-      // ✅ Create department
       this.departmentService.createDepartment(this.department).subscribe(response => {
         console.log('Department created:', response);
         alert('Department created successfully!');
+        this.departmentSaved.emit();
+        this.close.emit(); // ✅ Close modal after saving
       }, error => {
         console.error('Error creating department:', error);
         alert('Failed to create department.');
@@ -35,7 +47,7 @@ export class DepartmentFormComponent {
     }
   }
 
-  cancel() {
-    console.log('Form canceled');
+  closeModal() {
+    this.close.emit(); // ✅ Notify parent to close modal
   }
 }

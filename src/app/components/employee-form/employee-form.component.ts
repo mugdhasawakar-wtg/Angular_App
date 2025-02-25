@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
-import { DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-employee-form',
@@ -8,50 +7,43 @@ import { DepartmentService } from '../../services/department.service';
   styleUrls: ['./employee-form.component.css']
 })
 export class EmployeeFormComponent implements OnInit {
-  employee: any = { name: '', department: '' }; // Store employee data
-  departments: any[] = []; // Store available departments
-  isEdit: boolean = false; // Track if editing mode
+  @Output() closeModal = new EventEmitter<void>(); // Emit event to close modal
+  @Output() employeeCreated = new EventEmitter<void>(); // Emit event after saving
+  @Input() employee: any = { nameFirst: '', nameLast: '' }; // Accept employee data
+  @Input() isEdit: boolean = false; // Accept edit flag
 
-  constructor(
-    private employeeService: EmployeeService,
-    private departmentService: DepartmentService
-  ) {}
+  constructor(private employeeService: EmployeeService) {}
 
-  ngOnInit(): void {
-    this.fetchDepartments(); // Load departments when component initializes
-  }
-
-  // ✅ Fetch all departments
-  fetchDepartments() {
-    this.departmentService.getDepartments().subscribe((response: any) => {
-      this.departments = response._embedded.department; // Extract department list
-    }, error => {
-      console.error('Error fetching departments:', error);
-    });
-  }
+  ngOnInit(): void {}
 
   // ✅ Submit form for creating or updating employee
   onSubmit() {
+    // Convert department objects to an array of URI strings
+    if (this.employee.departments && this.employee.departments.length > 0) {
+      this.employee.departments = this.employee.departments.map((dept: any) =>
+        `/API/department/${dept.id}`
+      );
+    }
+
     if (this.isEdit) {
-      console.log('Updating employee:', this.employee);
       this.employeeService.updateEmployee(this.employee.id, this.employee).subscribe(() => {
         alert('Employee updated successfully!');
+        this.employeeCreated.emit(); // Notify parent
       }, error => {
         console.error('Error updating employee:', error);
       });
     } else {
-      console.log('Creating employee:', this.employee);
       this.employeeService.createEmployee(this.employee).subscribe(() => {
         alert('Employee created successfully!');
+        this.employeeCreated.emit(); // Notify parent
       }, error => {
         console.error('Error creating employee:', error);
       });
     }
   }
 
-  // ✅ Cancel form submission
+  // ✅ Close modal
   cancel() {
-    this.employee = { name: '', department: '' }; // Reset form
-    this.isEdit = false;
+    this.closeModal.emit(); // Notify parent to close modal
   }
 }

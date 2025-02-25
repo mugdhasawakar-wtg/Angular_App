@@ -1,20 +1,26 @@
-<div class="container">
-  <h3>{{ isEdit ? 'Edit Employee' : 'Add Employee' }}</h3>
+<div class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEdit ? 'Edit Employee' : 'Create Employee' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal.emit()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" class="p-4 border rounded bg-light">
+          <div class="mb-3">
+            <label for="nameFirst" class="form-label">First Name</label>
+            <input type="text" id="nameFirst" class="form-control" [(ngModel)]="employee.nameFirst" name="nameFirst" required>
+          </div>
 
-  <form (ngSubmit)="onSubmit()" class="p-4 border rounded bg-light">
-    <div class="mb-3">
-      <label for="name" class="form-label">Employee Name</label>
-      <input type="text" id="name" class="form-control" [(ngModel)]="employee.name" name="name" required>
+          <div class="mb-3">
+            <label for="nameLast" class="form-label">Last Name</label>
+            <input type="text" id="nameLast" class="form-control" [(ngModel)]="employee.nameLast" name="nameLast" required>
+          </div>
+
+          <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Save' }}</button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="closeModal.emit()">Close</button>
+        </form>
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label for="department" class="form-label">Department</label>
-      <select id="department" class="form-control" [(ngModel)]="employee.department" name="department" required>
-        <option *ngFor="let dept of departments" [value]="dept.name">{{ dept.name }}</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Save' }}</button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">Cancel</button>
-  </form>
+  </div>
 </div>

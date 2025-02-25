@@ -7,47 +7,49 @@ import { DepartmentService } from '../../services/department.service';
   styleUrls: ['./department-list.component.css']
 })
 export class DepartmentListComponent implements OnInit {
-  departments: any[] = []; // Stores departments
-  selectedDepartment: any = null; // Holds department being edited
-  isEdit: boolean = false; // Flag for edit mode
+  departments: any[] = [];
+  selectedDepartment: any = null;
+  isEdit: boolean = false;
+  showModal: boolean = false; // ✅ Controls modal visibility
 
   constructor(private departmentService: DepartmentService) {}
 
   ngOnInit(): void {
-    this.fetchDepartments(); // Load departments on component initialization
+    this.fetchDepartments();
   }
 
-  // ✅ Fetch departments from API
   fetchDepartments() {
     this.departmentService.getDepartments().subscribe((response: any) => {
-      this.departments = response._embedded.department; // Extract department list
+      this.departments = response._embedded.department;
     }, error => {
       console.error('Error fetching departments:', error);
     });
   }
 
-  // ✅ Open modal for creating a new department
   openCreateModal() {
-    console.log("Create button clicked");
     this.selectedDepartment = { name: '', readOnly: false, mandatory: false };
     this.isEdit = false;
+    this.showModal = true; // ✅ Open modal
   }
 
-  // ✅ Open modal for editing an existing department
   editDepartment(department: any) {
-    this.selectedDepartment = { ...department }; // Clone object to avoid mutation
+    this.selectedDepartment = { ...department };
     this.isEdit = true;
+    this.showModal = true; // ✅ Open modal
   }
 
-  // ✅ Delete a department
   deleteDepartment(id: number) {
     if (confirm('Are you sure you want to delete this department?')) {
       this.departmentService.deleteDepartment(id).subscribe(() => {
         alert('Department deleted successfully!');
-        this.fetchDepartments(); // Refresh list after deletion
+        this.fetchDepartments();
       }, error => {
         console.error('Error deleting department:', error);
       });
     }
+  }
+
+  closeModal() {
+    this.showModal = false; // ✅ Close modal
   }
 }

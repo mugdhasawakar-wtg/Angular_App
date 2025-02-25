@@ -1,0 +1,78 @@
+/* Modal Background Overlay */
+.modal {
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+/* Modal Dialog */
+.modal-dialog {
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Modal Content */
+.modal-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Header */
+.modal-header {
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Close Button */
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Form Fields */
+.form-label {
+  font-weight: normal;
+}
+
+.form-control {
+  border-radius: 5px;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 5px;
+}
+
+.btn-success {
+  background-color: #007bff; /* Blue Save button */
+  border-color: #007bff;
+}
+
+.btn-success:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}

@@ -5,16 +5,16 @@
     <thead class="table-dark">
     <tr>
       <th>ID</th>
-      <th>Name</th>
-      <th>Department</th>
+      <th>First Name</th>
+      <th>Last Name</th>
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let employee of employees">
       <td>{{ employee.id }}</td>
-      <td>{{ employee.name }}</td>
-      <td>{{ employee.department }}</td>
+      <td>{{ employee.nameFirst }}</td>
+      <td>{{ employee.nameLast }}</td>
       <td>
         <button class="btn btn-warning btn-sm me-2" (click)="editEmployee(employee)">✏ Edit</button>
         <button class="btn btn-danger btn-sm" (click)="deleteEmployee(employee.id)">🗑 Delete</button>
@@ -22,4 +22,12 @@
     </tr>
     </tbody>
   </table>
+  <app-employee-form
+    *ngIf="showCreateEmployeeModal"
+    [employee]="employee"
+    [isEdit]="isEdit"
+    (closeModal)="closeCreateModal()"
+    (employeeCreated)="handleEmployeeCreated()">
+  </app-employee-form>
+
 </div>
